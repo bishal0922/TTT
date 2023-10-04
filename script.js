@@ -44,11 +44,11 @@ cells.forEach((cell) => {
 
       // Check for a win after the player's move
       if (checkWin(board, "X")) {
-        console.log("You player X win!");
+        console.log("Player X win!");
         gameOver = true;
 
         setTimeout(function () {
-          alert("You player X win!");
+          alert("You won, here's a cookie 🍪");
         }, 100);
 
 
@@ -65,7 +65,7 @@ cells.forEach((cell) => {
           gameOver = true;
 
           setTimeout(function () {
-            alert("AI (Player O) wins!");
+            alert("No way you lost to me😭, I'm coming for your job 😈");
           }, 100);
           return; // Stop the game
         }
