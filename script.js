@@ -23,6 +23,12 @@ function resetGame() {
   turnInfo.textContent = "Choose your opponent to start the game.";
   gameOver = false; // Reset the game state
   opponentSelector.value = "none";
+
+    if (opponentSelector.value === "human") {
+    // Start with Player X
+    currentPlayer = "X";
+    turnInfo.textContent = "Player X's move!";
+  }
 }
 
 resetButton.addEventListener("click", resetGame);
@@ -33,8 +39,10 @@ opponentSelector.addEventListener("change", function () {
   cells.forEach((cell) => (cell.textContent = "")); // Clear cell content
   if (opponentSelector.value === "ai") {
     turnInfo.textContent = "You are playing against Minimax AI. Your move!";
-  } else {
+  } else if (opponentSelector.value === "joe"){
     turnInfo.textContent = "You are playing against Random Joe. Your move!";
+  } else {
+    turnInfo.textContent = "You are playing by yourself. Your move!";
   }
 });
 
@@ -49,14 +57,14 @@ cells.forEach((cell) => {
     if (!currentPlayer || gameOver) return; // Don't proceed if no opponent is selected
 
     const index = cell.dataset.index;
-    if (!board[index]) {
-      board[index] = "X";
-      cell.textContent = "X";
+    if (!board[index] && currentPlayer && !gameOver) {
+      board[index] = currentPlayer;
+      cell.textContent = currentPlayer;
 
       // Check for a win after the player's move
-      if (checkWin(board, "X")) {
+      if (checkWin(board, currentPlayer)) {
         console.log("Player X (User) wins!");
-        highlightWinningCells(getWinCombo(board, "X"))
+        highlightWinningCells(getWinCombo(board, currentPlayer))
         gameOver = true;
 
         setTimeout(function () {
@@ -66,7 +74,11 @@ cells.forEach((cell) => {
         return; // Stop the game
       }
 
-      if (opponentSelector.value === "ai") {
+
+      if (opponentSelector.value == "human"){
+         currentPlayer = currentPlayer === "X" ? "O" : "X";
+          turnInfo.textContent = `Player ${currentPlayer}'s move!`;
+      } else if (opponentSelector.value === "ai") {
         const aiMove = minimax(board, "X").index;
         board[aiMove] = "O";
         cells[aiMove].textContent = "O";
@@ -105,7 +117,8 @@ cells.forEach((cell) => {
           return; // Stop the game
         }
         turnInfo.textContent = "Your move!";
-      }
+      } 
+
     }
   });
 });
