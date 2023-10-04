@@ -15,9 +15,14 @@ const resetButton = document.getElementById("resetButton");
 function resetGame() {
   currentPlayer = null;
   board.fill(null);
-  cells.forEach((cell) => (cell.textContent = ""));
+  cells.forEach((cell) => {
+    cell.textContent = "";
+    //new
+    cell.classList.remove("winning-cell"); // remove the winning highlight
+  });
   turnInfo.textContent = "Choose your opponent to start the game.";
   gameOver = false; // Reset the game state
+  opponentSelector.value = "none";
 }
 
 resetButton.addEventListener("click", resetGame);
@@ -33,6 +38,12 @@ opponentSelector.addEventListener("change", function () {
   }
 });
 
+function highlightWinningCells(winningCombo) {
+  winningCombo.forEach((index) => {
+    cells[index].classList.add("winning-cell");
+  });
+}
+
 cells.forEach((cell) => {
   cell.addEventListener("click", function () {
     if (!currentPlayer || gameOver) return; // Don't proceed if no opponent is selected
@@ -44,13 +55,13 @@ cells.forEach((cell) => {
 
       // Check for a win after the player's move
       if (checkWin(board, "X")) {
-        console.log("Player X win!");
+        console.log("Player X (User) wins!");
+        highlightWinningCells(getWinCombo(board, "X"))
         gameOver = true;
 
         setTimeout(function () {
           alert("You won, here's a cookie 🍪");
         }, 100);
-
 
         return; // Stop the game
       }
@@ -59,29 +70,37 @@ cells.forEach((cell) => {
         const aiMove = minimax(board, "X").index;
         board[aiMove] = "O";
         cells[aiMove].textContent = "O";
-        // Check for a win after the AI's move
-        if (checkWin(board, "O")) {
-          console.log("AI (Player O) wins!");
-          gameOver = true;
 
+        // Check for a win after the AI's move
+        const winningCombo = getWinCombo(board, "O");
+
+        if (winningCombo) {
+          console.log(winningCombo);
+          console.log("AI (Player O) wins!");
+          //highlight the winning cells
+          highlightWinningCells(winningCombo);
+          gameOver = true;
           setTimeout(function () {
             alert("No way you lost to me😭, I'm coming for your job 😈");
           }, 100);
+
           return; // Stop the game
         }
-
         turnInfo.textContent = "Your move!";
-      } else {
+
+      } else if (opponentSelector.value == "joe") {
         const joeMove = randomJoeMove(board);
         board[joeMove] = "O";
         cells[joeMove].textContent = "O";
 
-        if (checkWin(board, "O")) {
+        const winningCombo = getWinCombo(board, "O");
+        if (winningCombo) {
+          console.log(winningCombo);
           console.log("Random Joe (Player O) wins!");
           gameOver = true;
 
           setTimeout(function () {
-            alert("Random Joe (Player O) wins!");
+            alert("Random Joe wins, Embarassing...");
           }, 100);
           return; // Stop the game
         }
@@ -180,4 +199,27 @@ function checkWin(board, player) {
     }
   }
   return false;
+}
+
+function getWinCombo(board, player) {
+  const winningCombos = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < winningCombos.length; i++) {
+    if (
+      board[winningCombos[i][0]] === player &&
+      board[winningCombos[i][1]] === player &&
+      board[winningCombos[i][2]] === player
+    ) {
+      return winningCombos[i];
+    }
+  }
+  return null;
 }
