@@ -1,36 +1,12 @@
 const cells = document.querySelectorAll(".cell");
 const board = Array(9).fill(null);
-let currentPlayer = null; // Will be set once user picks an opponent
-
 const turnInfo = document.getElementById("turnInfo");
-
 const opponentSelector = document.getElementById("opponent");
-
 let gameOver = false;
+let currentPlayer = null; // Will be set once user picks an opponent
 
 // reference to the Reset button
 const resetButton = document.getElementById("resetButton");
-
-// Function to reset the game
-function resetGame() {
-  currentPlayer = null;
-  board.fill(null);
-  cells.forEach((cell) => {
-    cell.textContent = "";
-    //new
-    cell.classList.remove("winning-cell"); // remove the winning highlight
-  });
-  turnInfo.textContent = "Choose your opponent to start the game.";
-  gameOver = false; // Reset the game state
-  opponentSelector.value = "none";
-
-    if (opponentSelector.value === "human") {
-    // Start with Player X
-    currentPlayer = "X";
-    turnInfo.textContent = "Player X's move!";
-  }
-}
-
 resetButton.addEventListener("click", resetGame);
 
 opponentSelector.addEventListener("change", function () {
@@ -46,12 +22,8 @@ opponentSelector.addEventListener("change", function () {
   }
 });
 
-function highlightWinningCells(winningCombo) {
-  winningCombo.forEach((index) => {
-    cells[index].classList.add("winning-cell");
-  });
-}
 
+// MAIN LOGIC
 cells.forEach((cell) => {
   cell.addEventListener("click", function () {
     if (!currentPlayer || gameOver) return; // Don't proceed if no opponent is selected
@@ -235,4 +207,31 @@ function getWinCombo(board, player) {
     }
   }
   return null;
+}
+
+// Function to reset the game
+function resetGame() {
+  currentPlayer = null;
+  board.fill(null);
+  cells.forEach((cell) => {
+    cell.textContent = "";
+    //new
+    cell.classList.remove("winning-cell"); // remove the winning highlight
+  });
+  turnInfo.textContent = "Choose your opponent to start the game.";
+  gameOver = false; // Reset the game state
+  opponentSelector.value = "none";
+
+    if (opponentSelector.value === "human") {
+    // Start with Player X
+    currentPlayer = "X";
+    turnInfo.textContent = "Player X's move!";
+  }
+}
+
+// Highlight winning cells by adding a class
+function highlightWinningCells(winningCombo) {
+  winningCombo.forEach((index) => {
+    cells[index].classList.add("winning-cell");
+  });
 }
