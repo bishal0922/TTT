@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TicTacToe</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Welcome to TicTacToe</h1>
+      <label for="opponent">Choose your opponent:</label>
+      <select id="opponent">
+        <option value="joe">Random Joe</option>
+        <option value="ai">Minimax AI</option>
+      </select>
+
+      <div class="board">
+        <div class="cell" data-index="0"></div>
+        <div class="cell" data-index="1"></div>
+        <div class="cell" data-index="2"></div>
+        <div class="cell" data-index="3"></div>
+        <div class="cell" data-index="4"></div>
+        <div class="cell" data-index="5"></div>
+        <div class="cell" data-index="6"></div>
+        <div class="cell" data-index="7"></div>
+        <div class="cell" data-index="8"></div>
+      </div>
+
+      <p id="turnInfo">Choose your opponent to start the game.</p>
+
+      <!-- <div class="turn-message">Your turn!</div> -->
+
+      <!-- Add a Reset button -->
+      <button id="resetButton">Reset</button>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
